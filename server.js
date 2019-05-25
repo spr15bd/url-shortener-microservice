@@ -3,7 +3,7 @@
 var express = require('express');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-
+var bodyParser = require('body-parser');
 var cors = require('cors');
 
 var app = express();
@@ -26,9 +26,10 @@ app.get('/', function(req, res){
   res.sendFile(process.cwd() + '/views/index.html');
 });
 
-  
+app.use(bodyParser.urlencoded({ extended: false }));  
 // your first API endpoint... 
 app.post("/api/shorturl/new", function (req, res) {
+  console.log("url is: "+req.body.url);
   dns.lookup('www.freecodecamp.com', function (err, addresses, family) {
   console.log(err);
   res.json({error: 'invalid URL'});
