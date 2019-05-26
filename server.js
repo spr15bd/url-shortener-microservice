@@ -30,11 +30,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // your first API endpoint... 
 app.post("/api/shorturl/new", function (req, res) {
   console.log("url is: "+req.body.url);
-  dns.lookup('www.freecodecamp.com', function (err, addresses, family) {
-  console.log(err);
-  res.json({error: 'invalid URL'});
-});
-  res.json({original_url: 'hello API'});
+  dns.lookup(req.body.url, function (err, addresses, family) {
+    if (err) {
+      res.json({error: 'invalid URL'});
+    }
+    res.json({original_url: req.body.url});
+  });
+  //res.json({original_url: 'hello API'});
 });
 
 
