@@ -30,7 +30,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // your first API endpoint... 
 app.post("/api/shorturl/new", function (req, res) {
   console.log("url is: "+req.body.url);
-  dns.lookup(req.body.url, function (err, addresses, family) {
+  let url = req.body.url.replace(/(^\w+:|^)\/\//, '');
+  dns.lookup(url, function (err, addresses, family) {
     if (err) {
       res.json({error: 'invalid URL'});
     }
