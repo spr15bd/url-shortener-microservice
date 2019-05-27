@@ -15,6 +15,7 @@ var port = process.env.PORT || 3000;
 /** this project needs a db !! **/ 
 mongoose.connect(process.env.MONGOLAB_URI);
 var Schema = mongoose.Schema;
+
 app.use(cors());
 
 var webAddressSchema = new Schema({
@@ -27,6 +28,8 @@ var webAddressSchema = new Schema({
     required: true
   }
 });
+
+var Address = mongoose.model('Address', webAddressSchema); 
 
 /** this project needs to parse POST bodies **/
 // you should mount the body-parser here
