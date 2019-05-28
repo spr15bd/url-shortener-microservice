@@ -23,7 +23,7 @@ var webAddressSchema = new Schema({
     type: String,
     required: true
   },
-  shrtUrl: {
+  shortUrl: {
     type: Number,
     required: true
   }
@@ -52,6 +52,18 @@ app.post("/api/shorturl/new", function (req, res) {
     }
     res.json({original_url: req.body.url});
     
+    var createAndSaveWebAddress = function(done){
+      var addr = new Address({url: url, shortUrl: 1});
+
+      addr.save(function(err, data){
+        if(err) {
+          done(err);
+        }
+        else {
+          done(null, data);
+        }
+      });
+    };
   });
   //res.json({original_url: 'hello API'});
 });
