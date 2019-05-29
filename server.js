@@ -51,10 +51,10 @@ app.post("/api/shorturl/new", function (req, res) {
       res.json({error: 'invalid URL'});
     }
     res.json({original_url: req.body.url});
-    
+    console.log("sent web addr in json");
     var createAndSaveWebAddress = function(done){
       var addr = new Address({url: url, shortUrl: 1});
-
+      console.log("new address created: "+addr);
       addr.save(function(err, data){
         if(err) {
           done(err);
