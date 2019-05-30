@@ -33,14 +33,14 @@ var Address = mongoose.model('Address', webAddressSchema);
 
 /** this project needs to parse POST bodies **/
 // you should mount the body-parser here
-
+app.use(bodyParser.urlencoded({ extended: false })); 
 app.use('/public', express.static(process.cwd() + '/public'));
 
 app.get('/', function(req, res){
   res.sendFile(process.cwd() + '/views/index.html');
 });
 
-app.use(bodyParser.urlencoded({ extended: false }));  
+ 
 // your first API endpoint... 
 app.post("/api/shorturl/new", function (req, res) {
   console.log("url is: "+req.body.url);
