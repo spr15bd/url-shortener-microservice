@@ -13,8 +13,17 @@ var dns = require('dns');
 var port = process.env.PORT || 3000;
 
 /** this project needs a db !! **/ 
-mongoose.connect(process.env.MONGOLAB_URI);
+mongoose.connect(process.env.MONGOLAB_URI, { useNewUrlParser: true });
 var Schema = mongoose.Schema;
+
+
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'))
+db.once('open', function() {
+  console.log('Connected to MongoDB');
+});
+
 
 app.use(cors());
 
@@ -50,8 +59,8 @@ app.post("/api/shorturl/new", function (req, res) {
     if (err) {
       res.json({error: 'invalid URL'});
     }
-    res.json({original_url: req.body.url});
-    console.log("sent web addr in json");
+    
+    
     var createAndSaveWebAddress = function(done){
       var addr = new Address({url: url, shortUrl: 1});
       console.log("new address created: "+addr);
@@ -64,6 +73,10 @@ app.post("/api/shorturl/new", function (req, res) {
         }
       });
     };
+    console.log("sending web addr in json");
+    res.json({original_url: req.body.url});
+    
+    
   });
   //res.json({original_url: 'hello API'});
 });
