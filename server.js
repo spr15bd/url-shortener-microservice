@@ -73,6 +73,13 @@ app.post("/api/shorturl/new", function (req, res) {
           console.log(data);
           if (data) {
             console.log("address added previously");
+            
+            res.json({
+            original_url: req.body.url,
+            short_url: data._id
+          });
+            
+          } else {
             createAndSaveWebAddress();
           }
         }
@@ -99,7 +106,7 @@ app.post("/api/shorturl/new", function (req, res) {
         }
       });
     };
-    //if (!urlExists(url)) {
+    urlExists(url);
     //  createAndSaveWebAddress();
     //}
     
