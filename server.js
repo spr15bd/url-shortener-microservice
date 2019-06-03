@@ -64,12 +64,17 @@ app.post("/api/shorturl/new", function (req, res) {
     if (err) {
       res.json({error: 'invalid URL'});
     }
-    var checkUrlExists = function(urlAddress) {
+    var urlExists = function(urlAddress) {
       address.find({url:urlAddress}, function(err, data) {
         if(err) {
           console.log("There was an error checking the already added addresses: "+err);
+          //return false;
         } else {
-          console.log("the address is already in the database");
+          console.log(data);
+          if (data) {
+            console.log("address added previously");
+            createAndSaveWebAddress();
+          }
         }
       });
     };
@@ -94,8 +99,10 @@ app.post("/api/shorturl/new", function (req, res) {
         }
       });
     };
-    checkUrlExists(url);
-    createAndSaveWebAddress();
+    //if (!urlExists(url)) {
+    //  createAndSaveWebAddress();
+    //}
+    
     
   });
   //res.json({original_url: 'hello API'});
