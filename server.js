@@ -41,7 +41,41 @@ var webAddressSchema = new Schema({
   }
 });
 
+var checkWhetherUrlExists = function(urlAddress, res, req) {
+  address.find({url:urlAddress}, function(err, data) {
+    if(err) {
+      console.log("There was an error checking the already added addresses: "+err);
+    } else {
+      console.log("Data length is: "+data.length);
+      //console.log(data[0].url);
+      if (data.length>0) {
+        console.log("address added previously");
+        res.json({
+          original_url: req.body.url,
+          short_url: data[0]._id
+        });
+      } else {
+        createAndSaveWebAddress(urlAddress, res, req);
+      }
+    }
+  });
+};
 
+var createAndSaveWebAddress = function(url, res, req){
+  var addr = new address({url: url});
+  addr.save(function(err, data){
+    if(err) {
+      console.log("There is an error: "+err);
+    } else {
+      console.log("new address created in db: "+addr);
+      console.log("sending web addr in json");
+      res.json({
+        original_url: req.body.url,
+        short_url: addr._id
+      });
+    }
+  });
+};
 
 var address = mongoose.model('address', webAddressSchema); 
 
@@ -64,51 +98,11 @@ app.post("/api/shorturl/new", function (req, res) {
     if (err) {
       res.json({error: 'invalid URL'});
     }
-    var urlExists = function(urlAddress) {
-      address.find({url:urlAddress}, function(err, data) {
-        if(err) {
-          console.log("There was an error checking the already added addresses: "+err);
-          //return false;
-        } else {
-          console.log(data);
-          if (data) {
-            console.log("address added previously");
-            
-            res.json({
-            original_url: req.body.url,
-            short_url: data._id
-          });
-            
-          } else {
-            createAndSaveWebAddress();
-          }
-        }
-      });
-    };
+    //
     
-    var createAndSaveWebAddress = function(){
-      var addr = new address({url: url});
-      
-      addr.save(function(err, data){
-        if(err) {
-          console.log("There is an error: "+err);
-          
-        }
-        else {
-          
-          console.log("new address created in db: "+addr);
-          console.log("sending web addr in json");
-          // TODO - return json with retrieved _id for the website
-          res.json({
-            original_url: req.body.url,
-            short_url: addr._id
-          });
-        }
-      });
-    };
-    urlExists(url);
-    //  createAndSaveWebAddress();
-    //}
+    //
+    checkWhetherUrlExists(url, res, req);
+    
     
     
   });
