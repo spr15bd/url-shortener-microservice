@@ -62,20 +62,21 @@ var checkWhetherUrlExists = function(urlAddress, res, req) {
 };
 
 var createAndSaveWebAddress = function(url, res, req){
-  var addr = new address({url: url});
-  addr.save(function(err, data){
-    if(err) {
-      console.log("There is an error: "+err);
-    } else {
-      console.log("new address created in db: "+addr);
-      console.log("sending web addr in json");
-      res.json({
-        original_url: req.body.url,
-        short_url: addr._id
+      var addr = new address({url: url});
+      
+      addr.save(function(err, data){
+        if(err) {
+          console.log("There is an error: "+err);
+        } else {
+          console.log("new address created in db: "+addr);
+          console.log("sending web addr in json");
+          res.json({
+            original_url: req.body.url,
+            short_url: addr._id
+          });
+        }
       });
-    }
-  });
-};
+    };
 
 var address = mongoose.model('address', webAddressSchema); 
 
@@ -86,6 +87,14 @@ app.use('/public', express.static(process.cwd() + '/public'));
 
 app.get('/', function(req, res){
   res.sendFile(process.cwd() + '/views/index.html');
+});
+
+
+app.get('/api/shorturl/:url', function(req, res){
+  console.log("redirect to shortUrl's website from database");
+  console.log("req params sorturl is: "+req.params.url);
+  // if req.params.url is a valid id in db, redirect user there
+  //res.sendFile(process.cwd() + '/views/index.html');
 });
 
  
