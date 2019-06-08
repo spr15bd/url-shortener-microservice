@@ -92,9 +92,18 @@ app.get('/', function(req, res){
 
 app.get('/api/shorturl/:url', function(req, res){
   console.log("redirect to shortUrl's website from database");
-  console.log("req params sorturl is: "+req.params.url);
+  console.log("req params: "+req.params.url);
   // if req.params.url is a valid id in db, redirect user there
   //res.sendFile(process.cwd() + '/views/index.html');
+  address.find({_id:req.params.url}, function(err, data) {
+    if(err) {
+      console.log("There was an error finding the shorturl in the database: "+err);
+    } else {
+      console.log("Found the shorturl");
+      console.log("This is the shorturl for "+data[0].url);
+      // redirect to db
+    }
+  });
 });
 
  
