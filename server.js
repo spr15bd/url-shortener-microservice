@@ -118,15 +118,12 @@ app.post("/api/shorturl/new", function (req, res) {
     if (err) {
       res.json({error: 'invalid URL'});
     }
-    //
     
-    //
     checkWhetherUrlExists(url, res, req);
     
     
     
   });
-  //res.json({original_url: 'hello API'});
 });
 
 
