@@ -37,7 +37,6 @@ var webAddressSchema = new Schema({
   },
   shortUrl: {
     type: Number
-    //required: true
   }
 });
 
@@ -47,7 +46,6 @@ var checkWhetherUrlExists = function(urlAddress, res, req) {
       console.log("There was an error checking the already added addresses: "+err);
     } else {
       console.log("Data length is: "+data.length);
-      //console.log(data[0].url);
       if (data.length>0) {
         console.log("address added previously");
         res.json({
@@ -94,7 +92,6 @@ app.get('/api/shorturl/:url', function(req, res){
   console.log("endpoint to redirect to shortUrl's website");
   console.log("req params: "+req.params.url);
   // if req.params.url is a valid id in db, redirect user there
-  //res.sendFile(process.cwd() + '/views/index.html');
   address.find({_id:req.params.url}, function(err, data) {
     if(err) {
       console.log("There was an error finding the shorturl in the database: "+err);
@@ -102,7 +99,6 @@ app.get('/api/shorturl/:url', function(req, res){
       console.log("Found the shorturl");
       console.log("This is the shorturl for "+data[0].url);
       // redirect to db
-      //res.redirect('/api/shorturl/'+data[0].url);
       res.redirect('http://'+data[0].url);
     }
   });
@@ -120,9 +116,6 @@ app.post("/api/shorturl/new", function (req, res) {
     }
     
     checkWhetherUrlExists(url, res, req);
-    
-    
-    
   });
 });
 
