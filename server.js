@@ -5,29 +5,19 @@ var mongo = require('mongodb');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var cors = require('cors');
-
 var app = express();
 var dns = require('dns');
-
 // Basic Configuration 
 var port = process.env.PORT || 3000;
-
-
-
 app.use(cors());
 /** this project needs a db !! **/ 
 mongoose.connect(process.env.MONGOLAB_URI, { useNewUrlParser: true });
 var Schema = mongoose.Schema;
-
-
-
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'))
 db.once('open', function() {
   console.log('Connected to MongoDB');
-  
 });
-
 
 var webAddressSchema = new Schema({
   url: {
@@ -87,11 +77,11 @@ app.get('/', function(req, res){
   res.sendFile(process.cwd() + '/views/index.html');
 });
 
-
 app.get('/api/shorturl/:url', function(req, res){
   console.log("endpoint to redirect to shortUrl's website");
   console.log("req params: "+req.params.url);
   // if req.params.url is a valid id in db, redirect user there
+  //res.sendFile(process.cwd() + '/views/index.html');
   address.find({_id:req.params.url}, function(err, data) {
     if(err) {
       console.log("There was an error finding the shorturl in the database: "+err);
@@ -114,11 +104,9 @@ app.post("/api/shorturl/new", function (req, res) {
     if (err) {
       res.json({error: 'invalid URL'});
     }
-    
     checkWhetherUrlExists(url, res, req);
   });
 });
-
 
 app.listen(port, function () {
   console.log('Node.js listening ...');
