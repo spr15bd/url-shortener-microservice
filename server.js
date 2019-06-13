@@ -97,12 +97,17 @@ app.get('/api/shorturl/:url', function(req, res){
  
 // your first API endpoint... 
 app.post("/api/shorturl/new", function (req, res) {
-  console.log("url is: "+req.body.url);
+  //console.log("url is: "+req.body.url);
+  if (req.body.url.length<1) {
+    res.json({error: 'invalid URL'});
+    return;
+  }
   let url = req.body.url.replace(/(^\w+:|^)\/\//, '');
   console.log("url is now "+url);
   dns.lookup(url, function (err, addresses, family) {
     if (err) {
       res.json({error: 'invalid URL'});
+      return;
     }
     checkWhetherUrlExists(url, res, req);
   });
