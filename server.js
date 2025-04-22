@@ -33,9 +33,9 @@ var webAddressSchema = new Schema({
 var checkWhetherUrlExists = function(urlAddress, res, req) {
   address.find({url:urlAddress}, function(err, data) {
     if(err) {
-      console.log("There was an error checking the already added addresses: "+err);
+      console.log("There was an error checking the already added addresses: ", err);
     } else {
-      console.log("Data length is: "+data.length);
+      console.log("Data length is: ", data.length);
       if (data.length>0) {
         console.log("address added previously");
         res.json({
@@ -54,9 +54,9 @@ var createAndSaveWebAddress = function(url, res, req){
       
       addr.save(function(err, data){
         if(err) {
-          console.log("There is an error: "+err);
+          console.log("There is an error: ", err);
         } else {
-          console.log("new address created in db: "+addr);
+          console.log("new address created in db: ", addr);
           console.log("sending web addr in json");
           res.json({
             original_url: req.body.url,
